@@ -49,6 +49,7 @@ export async function getCompany(id) {
         description
         jobs {
           id
+          date
           title
         }
       }
@@ -57,3 +58,4 @@ export async function getCompany(id) {
   const { company } = await client.request(query, { id });
   return company;
 }
+
