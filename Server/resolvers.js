@@ -1,4 +1,11 @@
-import { getJobs, getJob, getJobsByCompany } from "./db/jobs.js";
+import {
+  getJobs,
+  getJob,
+  getJobsByCompany,
+  createJob,
+  deleteJob,
+  updateJob,
+} from "./db/jobs.js";
 import { getCompany } from "./db/companies.js";
 import { GraphQLError } from "graphql";
 export const resolvers = {
@@ -16,12 +23,40 @@ export const resolvers = {
     },
     company: async (_parent, { id }) => {
       const company = await getCompany(id);
-      if (!company) { 
+      if (!company) {
         notFoundErr(`Company not found with id: ${id}`);
       }
       return company;
     },
   },
+
+  // Mutation: {
+  //   createJob: async (_root, {title, description}) => {
+  //     const companyId = "FjcJCHJALA4i";
+  //     const job = await createJob({companyId,title, description})
+  //     return job;
+  //   }
+  // },
+
+  Mutation: {
+    createJob: async (_root, { input: { title, description } }) => {
+      const companyId = "FjcJCHJALA4i";
+      const job = await createJob({ companyId, title, description });
+      return job;
+    },
+
+    deleteJob: async (_root, { id }) => {
+      const job = await deleteJob(id);
+      return job;
+    },
+
+    updateJob: async (_root, { input: { id, title, description}}) => {
+      const job = await updateJob({ id, title, description });
+      return job;
+    }
+
+  },
+
   Job: {
     company: (job) => {
       return getCompany(job.companyId);
