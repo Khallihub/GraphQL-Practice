@@ -1,6 +1,18 @@
 import { GraphQLClient, gql } from "graphql-request";
+import { getAccessToken } from "../auth";
 
-const client = new GraphQLClient("http://localhost:9000/graphql");
+const client = new GraphQLClient("http://localhost:9000/graphql", {
+  // the headers is set to a function because if it is an object it will be set initially when the component loads and never change
+  headers: () => {
+    const accessToken = getAccessToken();
+    if (accessToken) {
+      return {
+        Authorization: `Bearer ${accessToken}`,
+      };
+    }
+    return {};
+  },
+});
 
 export async function getJobs() {
   const query = gql`

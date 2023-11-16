@@ -39,22 +39,42 @@ export const resolvers = {
   // },
 
   Mutation: {
-    createJob: async (_root, { input: { title, description } }) => {
-      const companyId = "FjcJCHJALA4i";
+    createJob: async (_root, { input: { title, description } }, { user }) => {
+      if (!user) {
+        throw new unauthorizedError("You must be logged in to create a job");
+      }
+      const companyId = user.companyId;
       const job = await createJob({ companyId, title, description });
       return job;
     },
 
-    deleteJob: async (_root, { id }) => {
-      const job = await deleteJob(id);
+    deleteJob: async (_root, { id }, { user }) => {
+      if (!user) {
+        throw new unauthorizedError("You must be logged in to delete a job");
+      }
+      const job = await deleteJob(id, user.companyId);
+      if (!job) {
+        throw new notFoundErr(`Job not found with id: ${id}`);
+      }
       return job;
     },
 
-    updateJob: async (_root, { input: { id, title, description}}) => {
-      const job = await updateJob({ id, title, description });
+    updateJob: async (
+      _root,
+      { input: { id, title, description } },
+      { user }
+    ) => {
+      if (!user) {
+        throw new unauthorizedError("You must be logged in to update a job");
+      }
+      const job = await updateJob({
+        id,
+        title,
+        description,
+        companyId: user.companyId,
+      });
       return job;
-    }
-
+    },
   },
 
   Job: {
@@ -74,5 +94,10 @@ export const resolvers = {
 function notFoundErr(message) {
   throw new GraphQLError(message, {
     extensions: { code: "NOT_FOUND" },
+  });
+}
+function unauthorizedError(message) {
+  throw new GraphQLError(message, {
+    extensions: { code: "UNAUTHORIZED" },
   });
 }
