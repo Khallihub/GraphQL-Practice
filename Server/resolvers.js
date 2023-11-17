@@ -18,12 +18,13 @@ export const resolvers = {
       return job;
     },
     jobs: async () => {
+      console.log("sth")
       const jobs = await getJobs();
       return jobs;
     },
     company: async (_parent, { id }) => {
       const company = await getCompany(id);
-      if (!company) {
+      if (!company) {  
         notFoundErr(`Company not found with id: ${id}`);
       }
       return company;

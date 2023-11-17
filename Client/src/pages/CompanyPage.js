@@ -5,6 +5,9 @@ import JobList from "../components/JobList";
 
 function CompanyPage() {
   const { companyId } = useParams();
+
+  
+
   const [state, setState] = useState({
     loading: true,
     error: false,
