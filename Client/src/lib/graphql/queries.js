@@ -64,6 +64,21 @@ const jobDetailFragment = gql`
   }
 `;
 
+export const CompanyById = gql`
+    query CompanyById($id: ID!) {
+      company(id: $id) {
+        id
+        name
+        description
+        jobs {
+          id
+          date
+          title
+        }
+      }
+    }
+  `;
+
 const jobByIdQuery = gql`
   query JobById($id: ID!) {
     job(id: $id) {
