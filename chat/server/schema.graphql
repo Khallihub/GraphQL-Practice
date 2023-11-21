@@ -2,6 +2,10 @@ type Query {
   messages: [Message!]
 }
 
+type Subscription {
+  messageAdded: Message
+}
+
 type Mutation {
   addMessage(text: String!): Message
 }

@@ -18,7 +18,7 @@ function Chat({ user }) {
           {`Chatting as ${user}`}
         </h1>
         <MessageList user={user} messages={messages} />
-        <MessageInput onSend={handleSend} />
+        <MessageInput onSend={handleSend} /> 
       </div>
     </section>
   );
